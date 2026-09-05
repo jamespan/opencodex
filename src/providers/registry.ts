@@ -2579,13 +2579,19 @@ export const PROVIDER_REGISTRY: readonly ProviderRegistryEntry[] = [
     // same-named custom row recovers no discovery policy instead of the slug envelope.
     jawcodeBundle: "zai",
     preserveCustomDestination: true,
-    modelContextWindows: { "glm-5.3": 1_048_576, "glm-5.3-flash": 1_048_576, "glm-5-turbo": 1_048_576 },
+    // Live rows (2026-09-05): 5.3 and 5.3-flash expose low/high/max with a max default;
+    // 5-turbo fixes its reasoning at max internally and lists NO selectable levels, so an
+    // explicit [] keeps the undefined entry from falling back to the full routed ladder.
+    modelContextWindows: { "glm-5.3": 1_048_576, "glm-5.3-flash": 1_048_576, "glm-5-turbo": 204_800 },
     modelReasoningEfforts: {
       "glm-5.3": ZAI_GLM_53_REASONING_EFFORTS,
       "glm-5.3-flash": ZAI_GLM_53_REASONING_EFFORTS,
+      "glm-5-turbo": [],
     },
-    modelSupportsReasoningSummaries: { "glm-5.3": true, "glm-5.3-flash": true },
-    preserveReasoningContentModels: ["glm-5.3", "glm-5.3-flash"],
+    modelSupportsReasoningSummaries: { "glm-5.3": true, "glm-5.3-flash": true, "glm-5-turbo": true },
+    // The Responses adapter replays reasoning via this provider-level flag, not the
+    // per-model preserveReasoningContentModels list (a Chat-path field).
+    preserveResponsesReasoningContent: true,
     modelDiscovery: { path: "models", envelopeKey: "models", idKey: "slug" },
     note: "Domestic BigModel Coding Plan on the OpenAI Responses wire (open.bigmodel.cn/api/v1)",
   },

@@ -401,6 +401,15 @@ describe("provider registry parity", () => {
     // place rather than catching it, because it was written from the incomplete
     // state instead of from the family definition.
     expect(zai?.modelDefaultReasoningEfforts).toEqual({ "glm-5.3": "max", "glm-5.3[1m]": "max", "glm-5.3-flash": "max" });
+    // The BigModel Responses row's glm-5-turbo contract comes from the live endpoint
+    // (2026-09-05): NO selectable reasoning levels (an explicit [] — an undefined entry
+    // would fall back to the full routed ladder), a 200K window, summaries on, and the
+    // provider-level Responses replay flag rather than the Chat-path per-model list.
+    const responses = PROVIDER_REGISTRY.find(entry => entry.id === "zhipu-bigmodel-responses");
+    expect(responses?.modelReasoningEfforts?.["glm-5-turbo"]).toEqual([]);
+    expect(responses?.modelContextWindows?.["glm-5-turbo"]).toBe(204_800);
+    expect(responses?.preserveResponsesReasoningContent).toBe(true);
+    expect(responses?.preserveReasoningContentModels).toBeUndefined();
     expect(zai?.modelMaxOutputTokens).toEqual({ "glm-5.3": 131_072, "glm-5.3[1m]": 131_072, "glm-5.3-flash": 131_072 });
     // Every 5.3 row carries the same three-tier ladder. Asserted per member rather
     // than as one object literal so adding a member cannot quietly skip it.
