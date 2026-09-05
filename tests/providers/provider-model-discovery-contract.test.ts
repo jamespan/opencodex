@@ -518,6 +518,15 @@ describe("registry-owned provider model discovery", () => {
       authMode: "key",
     });
     expect(custom.spec).toBeUndefined();
+    // The entry opts into preserveCustomDestination, so a same-named row on a custom
+    // destination is an exact-transport mismatch: it recovers no discovery policy at all
+    // instead of resolving the slug envelope against its own custom URL.
+    const sameNamedCustom = resolveProviderModelDiscovery("zhipu-bigmodel-responses", {
+      adapter: "openai-responses",
+      baseUrl: "https://custom.example/api/v1",
+      authMode: "key",
+    });
+    expect(sameNamedCustom.spec).toBeUndefined();
   });
 
   test("rejects control characters and outer whitespace in provider-native model ids", () => {

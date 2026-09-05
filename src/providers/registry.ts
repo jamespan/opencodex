@@ -2572,7 +2572,13 @@ export const PROVIDER_REGISTRY: readonly ProviderRegistryEntry[] = [
     dashboardUrl: "https://bigmodel.cn/console/usercenter/apikeys",
     defaultModel: "glm-5.3",
     models: ["glm-5.3", "glm-5.3-flash", "glm-5-turbo"],
+    liveModels: true,
+    // A user may already own a custom provider named "zhipu-bigmodel-responses" pointing
+    // elsewhere; without this, registry transport canonicalization would retarget it and
+    // send their saved key to BigModel. It also forces the exact-transport match, so a
+    // same-named custom row recovers no discovery policy instead of the slug envelope.
     jawcodeBundle: "zai",
+    preserveCustomDestination: true,
     modelContextWindows: { "glm-5.3": 1_048_576, "glm-5.3-flash": 1_048_576, "glm-5-turbo": 1_048_576 },
     modelReasoningEfforts: {
       "glm-5.3": ZAI_GLM_53_REASONING_EFFORTS,
